@@ -11,9 +11,9 @@ export default function LoginPage() {
       <header className="border-b border-slate-200 bg-white py-4 px-6 shadow-xs dark:border-slate-800 dark:bg-slate-900">
         <div className="mx-auto max-w-7xl flex items-center justify-between">
           <p className="text-xl font-bold tracking-tight">Hệ thống chấm công GPS</p>
-          <nav aria-label="Menu phụ">
+          {/* <nav aria-label="Menu phụ">
             <a href="#" className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400">Trợ giúp</a>
-          </nav>
+          </nav> */}
         </div>
       </header>
 
@@ -43,7 +43,7 @@ export default function LoginPage() {
       </main>
 
       <footer className="border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
-        <small>&copy; 2026</small>
+        <small>&copy; 2026 WMS</small>
       </footer>
     </div>
   );
