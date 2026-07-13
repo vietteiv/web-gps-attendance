@@ -1,3 +1,8 @@
+
+
+
+
+
 import { google } from "googleapis";
 
 const auth = new google.auth.JWT({
@@ -50,3 +55,4 @@ export async function appendAttendanceToSheet(record: AttendanceRecord) {
     return { success: false, error };
   }
 }
+
