@@ -1,4 +1,5 @@
 import React from "react";
+import { loginWithGoogle } from "@/features/auth/actions";
 
 export const metadata = {
   title: "Đăng nhập | Hệ thống chấm công GPS WMS",
@@ -11,9 +12,6 @@ export default function LoginPage() {
       <header className="border-b border-slate-200 bg-white py-4 px-6 shadow-xs dark:border-slate-800 dark:bg-slate-900">
         <div className="mx-auto max-w-7xl flex items-center justify-between">
           <p className="text-xl font-bold tracking-tight">Hệ thống chấm công GPS</p>
-          {/* <nav aria-label="Menu phụ">
-            <a href="#" className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400">Trợ giúp</a>
-          </nav> */}
         </div>
       </header>
 
@@ -24,14 +22,15 @@ export default function LoginPage() {
             <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Sử dụng tài khoản Gmail nội bộ để tiếp tục</p>
           </header>
 
-          <form action="#" className="space-y-4">
+          {/* Thay đổi action gọi Server Action đăng nhập */}
+          <form action={loginWithGoogle} className="space-y-4">
             <fieldset className="border-0 p-0 m-0 space-y-4">
               <legend className="sr-only">Xác thực tài khoản</legend>
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-3 rounded-lg bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition-colors dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
+                className="w-full flex items-center justify-center gap-3 rounded-lg bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition-colors dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 cursor-pointer"
               >
-                <span>Đăng nhập bằng Google Workspace</span>
+                <span>Đăng nhập bằng Google</span>
               </button>
             </fieldset>
           </form>

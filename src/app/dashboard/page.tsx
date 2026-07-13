@@ -1,4 +1,8 @@
 import React from "react";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import { logout } from "@/features/auth/actions";
+import { AttendanceButtons } from "@/components/attendance-buttons";
 
 export const metadata = {
   title: "Bảng điều khiển | Hệ thống chấm công GPS WMS",
@@ -6,23 +10,43 @@ export const metadata = {
 };
 
 const mockHistory = [
-  { id: 1, date: "2026-07-13", checkIn: "08:02 AM", checkOut: "17:30 PM", status: "Hợp lệ", location: "Văn phòng Quận 1" },
-  { id: 2, date: "2026-07-10", checkIn: "07:55 AM", checkOut: "17:05 PM", status: "Hợp lệ", location: "Văn phòng Quận 1" },
+  { id: 1, date: "13/07/2026", checkIn: "08:02:15", checkOut: "--:--:--", status: "Hợp lệ", location: "Văn phòng Dong tay" },
+  { id: 2, date: "10/07/2026", checkIn: "07:55:22", checkOut: "17:05:40", status: "Hợp lệ", location: "Văn phòng Dong tay" },
 ];
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  // 1. Lấy dữ liệu phiên đăng nhập từ Google thông qua bộ nhớ đệm Server
+  const session = await auth();
+
+  // Phòng hờ nếu middleware lọt khe thì đá ra ngoài login
+  if (!session?.user) {
+    redirect("/login");
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50">
-      <header className="border-b border-slate-200 bg-white py-4 px-6 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+      {/* GLOBAL HEADER */}
+      <header role="banner" className="border-b border-slate-200 bg-white py-4 px-6 shadow-xs dark:border-slate-800 dark:bg-slate-900">
         <div className="mx-auto max-w-7xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <p className="text-xl font-bold tracking-tight">Hệ thống chấm công GPS</p>
+          
           <nav aria-label="Menu chính" className="flex items-center gap-4">
-            <span className="text-sm text-slate-500 dark:text-slate-400">Nguyễn Văn A</span>
-            <button type="button" className="text-sm font-medium text-red-600 hover:underline dark:text-red-400">Đăng xuất</button>
+            {/* Đổ tên động từ tài khoản Google vào đây */}
+            <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+              {session.user.name || "Nhân viên WMS"}
+            </span>
+            
+            {/* Sử dụng form hành động Server Action để Đăng xuất */}
+            <form action={logout}>
+              <button type="submit" className="text-sm font-medium text-red-600 hover:underline dark:text-red-400 cursor-pointer">
+                Đăng xuất
+              </button>
+            </form>
           </nav>
         </div>
       </header>
 
+      {/* MAIN CONTENT AREA */}
       <main className="flex-1 mx-auto max-w-7xl w-full p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
         <h1 className="sr-only">Bảng điều khiển chấm công cá nhân</h1>
 
@@ -34,19 +58,19 @@ export default function DashboardPage() {
               <p className="text-xs text-slate-500 dark:text-slate-400">Hôm nay: <time dateTime="2026-07-13">Thứ Hai, 13/07/2026</time></p>
             </header>
 
+            {/* Khung Camera Selfie */}
             <figure className="mb-6 overflow-hidden rounded-xl bg-slate-100 border border-dashed border-slate-300 aspect-video flex flex-col items-center justify-center text-center p-4 dark:bg-slate-800 dark:border-slate-700">
               <figcaption className="text-xs text-slate-500 dark:text-slate-400 font-medium">Camera sẵn sàng (Selfie tự động)</figcaption>
             </figure>
 
+            {/* Khối thông tin định vị GPS */}
             <aside className="mb-6 rounded-lg bg-blue-50 p-3 text-xs text-blue-800 dark:bg-blue-950/40 dark:text-blue-300" aria-label="Thông tin định vị">
               <p className="font-semibold">Tọa độ GPS Hiện Tại:</p>
-              <p className="mt-1 font-mono">10.7626° N, 106.6602° E</p>
+              <p className="mt-1 font-mono">10.7347° N, 106.6678° E</p>
             </aside>
 
-            <div className="grid grid-cols-2 gap-4">
-              <button type="button" className="w-full rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white shadow-xs hover:bg-emerald-500 transition-all">VÀO CA</button>
-              <button type="button" className="w-full rounded-xl bg-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 shadow-xs hover:bg-slate-300 transition-all dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">RA CA</button>
-            </div>
+            {/* COMPONENT NÚT BẤM CHẤM CÔNG CO RE-USABLE KẾT NỐI SERVER ACTION */}
+            <AttendanceButtons />
           </article>
         </section>
 
@@ -88,7 +112,7 @@ export default function DashboardPage() {
                   {mockHistory.map((row) => (
                     <tr key={row.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
                       <td className="py-3 font-medium">
-                        <time dateTime={row.date}>{row.date}</time>
+                        <time dateTime={row.date.split('/').reverse().join('-')}>{row.date}</time>
                       </td>
                       <td className="py-3 text-slate-600 dark:text-slate-400">{row.checkIn}</td>
                       <td className="py-3 text-slate-600 dark:text-slate-400">{row.checkOut}</td>
@@ -106,6 +130,7 @@ export default function DashboardPage() {
         </section>
       </main>
 
+      {/* GLOBAL FOOTER */}
       <footer className="border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
         <small>&copy; 2026 WMS</small>
       </footer>
