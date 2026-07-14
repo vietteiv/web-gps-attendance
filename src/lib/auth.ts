@@ -1,28 +1,45 @@
-import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
+import NextAuth, { type DefaultSession } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+
+declare module "next-auth" {
+  interface Session {
+    accessToken?: string;
+    user: {
+      id?: string;
+    } & DefaultSession["user"];
+  }
+}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          scope: "openid email profile https://www.googleapis.com/auth/drive.file",
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
     }),
   ],
-  pages: {
-    signIn: "/login", // Định nghĩa trang login custom của mình
-  },
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
-      
-      if (isOnDashboard) {
-        if (isLoggedIn) return true;
-        return false; // Điều hướng về trang login nếu chưa đăng nhập
-      } else if (isLoggedIn && nextUrl.pathname === "/login") {
-        return Response.redirect(new URL("/dashboard", nextUrl));
+    // 1. Lưu access_token từ tài khoản Google vào JWT
+    async jwt({ token, account }) {
+      if (account) {
+        token.accessToken = account.access_token;
       }
-      return true;
+      return token;
+    },
+    // 2. Đưa access_token từ JWT ra Session để Server Action có thể đọc được
+  async session({ session, token }) {
+      // Ép kiểu an toàn để TypeScript biết chắc chắn accessToken là kiểu string
+      if (token && typeof token.accessToken === "string") {
+        session.accessToken = token.accessToken;
+      }
+      return session;
     },
   },
 });
