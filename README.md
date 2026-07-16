@@ -7,8 +7,6 @@ and Prisma. Designed for SaaS from day one.
 
 Next.js TypeScript React Supabase Prisma TailwindCSS License
 
-------------------------------------------------------------------------
-
 ## Overview
 
 GPS Attendance System là nền tảng chấm công bằng GPS dành cho doanh
@@ -23,8 +21,6 @@ Hệ thống tập trung vào:
 - 📊 Real-time Dashboard
 - ☁️ Cloud Deployment
 - 🏢 Multi-Tenant Architecture
-
-------------------------------------------------------------------------
 
 # Preview
 
@@ -56,8 +52,6 @@ Hệ thống tập trung vào:
          ▼
      Supabase Storage
 
-------------------------------------------------------------------------
-
 # Features
 
 ## Authentication
@@ -67,16 +61,12 @@ Hệ thống tập trung vào:
 - Protected Routes
 - Role-based Authorization
 
-------------------------------------------------------------------------
-
 ## Employee Management
 
 - Employee CRUD
 - Search
 - Department
 - Status Management
-
-------------------------------------------------------------------------
 
 ## GPS Attendance
 
@@ -87,16 +77,12 @@ Hệ thống tập trung vào:
 - Office Radius
 - Attendance History
 
-------------------------------------------------------------------------
-
 ## Selfie Verification
 
 - Camera Capture
 - Image Compression
 - Image Upload
 - Attendance Photo History
-
-------------------------------------------------------------------------
 
 ## Dashboard
 
@@ -106,8 +92,6 @@ Hệ thống tập trung vào:
 - Early Leave
 - Absent Employees
 - Attendance Statistics
-
-------------------------------------------------------------------------
 
 # Technology Stack
 
@@ -126,8 +110,6 @@ Hệ thống tập trung vào:
 | Data Fetching | TanStack Query          |
 | Tables        | TanStack Table          |
 | Deployment    | Vercel                  |
-
-------------------------------------------------------------------------
 
 # Project Structure
 
@@ -156,11 +138,9 @@ Hệ thống tập trung vào:
     │
     └── utils/
 
-------------------------------------------------------------------------
-
 # Database Design
 
-    companies
+    settings
     │
     ├── users
     │
@@ -168,7 +148,7 @@ Hệ thống tập trung vào:
     │
     ├── attendance
     │
-    └── settings
+    └── times
 
 ## Design Principles
 
@@ -178,8 +158,6 @@ Hệ thống tập trung vào:
 - Audit Fields
 - Optimized Indexes
 - Future-proof Schema
-
-------------------------------------------------------------------------
 
 # Architecture
 
@@ -207,8 +185,6 @@ Hệ thống tập trung vào:
     │ PostgreSQL          │
     └─────────────────────┘
 
-------------------------------------------------------------------------
-
 # Roadmap
 
 ## Phase 1 — MVP
@@ -216,11 +192,11 @@ Hệ thống tập trung vào:
 - Authentication
 - Employee Management
 - GPS Attendance
+- Check In / Out
 - Selfie
 - Dashboard
 - Attendance History
-
-------------------------------------------------------------------------
+- PWA
 
 ## Phase 2
 
@@ -229,8 +205,6 @@ Hệ thống tập trung vào:
 - Holiday Calendar
 - Notifications
 
-------------------------------------------------------------------------
-
 ## Phase 3
 
 - Payroll
@@ -238,16 +212,12 @@ Hệ thống tập trung vào:
 - Approval Workflow
 - Reports
 
-------------------------------------------------------------------------
-
 ## Phase 4
 
 - Face Recognition
 - QR Attendance
 - Mobile App
 - AI Analytics
-
-------------------------------------------------------------------------
 
 # Security
 
@@ -260,13 +230,7 @@ Hệ thống tập trung vào:
 - SQL Injection Protection
 - CSRF Protection
 
-------------------------------------------------------------------------
-
 # Getting Started
-
-## Clone
-
-    git clone https://github.com/TiendoLabs/gps-attendance.git
 
 ## Install
 
@@ -275,8 +239,6 @@ Hệ thống tập trung vào:
 ## Development
 
     npm run dev
-
-------------------------------------------------------------------------
 
 # Environment Variables
 
@@ -294,8 +256,6 @@ Hệ thống tập trung vào:
 
     SUPABASE_SERVICE_ROLE_KEY=
 
-------------------------------------------------------------------------
-
 # Deployment
 
 | Service  | Provider            |
@@ -305,15 +265,11 @@ Hệ thống tập trung vào:
 | Storage  | Supabase Storage    |
 | Domain   | Custom Domain       |
 
-------------------------------------------------------------------------
-
 # Version
 
 Current Release
 
     v1.0.0
-
-------------------------------------------------------------------------
 
 # Development Principles
 
@@ -326,13 +282,9 @@ Current Release
 - Production Ready
 - SaaS Ready
 
-------------------------------------------------------------------------
-
 # License
 
 MIT License
-
-------------------------------------------------------------------------
 
 # Author
 
