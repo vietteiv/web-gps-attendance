@@ -5,6 +5,7 @@ import { logout } from "@/features/auth/actions";
 import { AttendanceButtons } from "@/components/attendance-buttons";
 import { getAttendanceHistory } from "@/lib/google-sheets";
 import { AttendanceHistory } from "@/components/attendance-history"; // Import bảng lọc Client mới
+import { isAdmin } from "@/lib/admin";
 
 export const metadata = {
   title: "Bảng điều khiển | Hệ thống chấm công GPS WMS",
@@ -34,6 +35,21 @@ export default async function DashboardPage() {
   // Tính số ngày công chuẩn trong tháng (số ngày duy nhất có ghi nhận chấm công)
   const totalWorkDays = groupedHistory.length;
 
+// TÍNH TOÁN SỐ LẦN ĐI MUỘN THỰC TẾ DỰA TRÊN LỊCH SỬ (Dùng tiếng Anh)
+  let lateCount = 0;
+  groupedHistory.forEach((group) => {
+    group.logs.forEach((log) => {
+      const shiftNameSafe = (log.shiftName || "").toLowerCase().trim();
+      
+      // So khớp với chữ "late" hoặc "(late)" 
+      if (
+        log.type === "VÀO CA" && 
+        (shiftNameSafe.includes("(late)") || shiftNameSafe.includes("late"))
+      ) {
+        lateCount++;
+      }
+    });
+  });
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50">
       {/* header */}
@@ -42,6 +58,14 @@ export default async function DashboardPage() {
           <p className="text-xl font-bold tracking-tight">Hệ thống chấm công GPS</p>
           
           <nav aria-label="Menu chính" className="flex items-center gap-4">
+            {isAdmin(session.user.email) && (
+              <a 
+                href="/dashboard/report" 
+                className="text-sm font-semibold text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 mr-2"
+              >
+                Trang quản lý 
+              </a>
+            )}
             <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
               {session.user.name || "Nhân viên WMS"}
             </span>
@@ -83,7 +107,8 @@ export default async function DashboardPage() {
               </div>
               <div className="flex flex-col">
                 <dt className="text-xs font-medium text-slate-500 order-2 mt-1 dark:text-slate-400">Đi muộn</dt>
-                <dd className="text-2xl font-bold tracking-tight text-amber-600 order-1 dark:text-amber-400">0 lần</dd>
+                {/* Thay thế số 0 cứng bằng biến lateCount tính toán động */}
+                <dd className="text-2xl font-bold tracking-tight text-amber-600 order-1 dark:text-amber-400">{lateCount} lần</dd>
               </div>
               <div className="flex flex-col">
                 <dt className="text-xs font-medium text-slate-500 order-2 mt-1 dark:text-slate-400">Nghỉ phép</dt>
